@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env*
+!.env.example
+*.log
+coverage/
+INTERVIEW_NOTES.md
+LOCAL_RUN.md
+*.zip
+__pycache__/

@@ -1,0 +1,5 @@
+[
+  {"transaction_id":"txn_matched","amount_cents":14999,"currency":"KES"},
+  {"transaction_id":"txn_discrepancy","amount_cents":5000,"currency":"KES"},
+  {"transaction_id":"txn_missing","amount_cents":2500,"currency":"KES"}
+]

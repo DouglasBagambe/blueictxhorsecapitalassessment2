@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ledger
+      POSTGRES_PASSWORD: local_dev_only
+      POSTGRES_DB: ledger
+    ports: ["5433:5432"]
+    volumes:
+      - ledger_data:/var/lib/postgresql/data
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./sql/test-database.sql:/docker-entrypoint-initdb.d/02-test-database.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ledger -d ledger"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://ledger:local_dev_only@db:5432/ledger
+      WEBHOOK_SECRET: ${WEBHOOK_SECRET:?Set WEBHOOK_SECRET in .env}
+      CUSTOMER_HASH_SECRET: ${CUSTOMER_HASH_SECRET:?Set CUSTOMER_HASH_SECRET in .env}
+      PORT: 3000
+    ports: ["3000:3000"]
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  ledger_data:

@@ -1,0 +1,12 @@
+{
+  "event_id": "evt_sample_1",
+  "type": "payment.succeeded",
+  "timestamp": "2026-08-13T12:00:00Z",
+  "data": {
+    "transaction_id": "txn_sample_1",
+    "amount_cents": 14999,
+    "currency": "KES",
+    "customer_email": "user@example.com",
+    "status": "completed"
+  }
+}

@@ -1,0 +1,43 @@
+Measured at 2026-10-06T23:41:26.684Z
+Node v22.20.0
+{
+  "version": "PostgreSQL 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit",
+  "ledger_rows": "1000000",
+  "completed_rows": "900000",
+  "ledger_total_size": "435 MB",
+  "covering_index_size": "143 MB"
+}
+Seed seconds: 34.080
+Target customer rows: 100
+KES sum: 4500100
+After seeding and VACUUM ANALYZE; OS cache not cleared, some PostgreSQL buffers read; no forced planner settings.
+
+WITH COVERING INDEX
+Aggregate  (cost=10.58..10.59 rows=1 width=32) (actual time=0.037..0.038 rows=1 loops=1)
+  Buffers: shared hit=1 read=5
+  ->  Index Only Scan using ledger_completed_customer_cover on ledger_entries  (cost=0.55..10.35 rows=90 width=8) (actual time=0.020..0.029 rows=100 loops=1)
+        Index Cond: ((customer_id = '23f29821ec8e78654a3d8388b063b2cbd41d29535c982ad693d6c1b676b60a79'::text) AND (currency = 'KES'::text))
+        Heap Fetches: 0
+        Buffers: shared hit=1 read=5
+Planning:
+  Buffers: shared hit=26 read=4
+Planning Time: 0.115 ms
+Execution Time: 0.051 ms
+
+WITHOUT COVERING INDEX (index removal rolled back)
+Finalize Aggregate  (cost=28746.99..28747.00 rows=1 width=32) (actual time=30.924..33.646 rows=1 loops=1)
+  Buffers: shared hit=6564 read=13891 written=67
+  ->  Gather  (cost=28746.76..28746.97 rows=2 width=32) (actual time=30.852..33.637 rows=3 loops=1)
+        Workers Planned: 2
+        Workers Launched: 2
+        Buffers: shared hit=6564 read=13891 written=67
+        ->  Partial Aggregate  (cost=27746.76..27746.77 rows=1 width=32) (actual time=29.092..29.093 rows=1 loops=3)
+              Buffers: shared hit=6564 read=13891 written=67
+              ->  Parallel Seq Scan on ledger_entries  (cost=0.00..27746.67 rows=38 width=8) (actual time=0.663..29.071 rows=33 loops=3)
+                    Filter: ((customer_id = '23f29821ec8e78654a3d8388b063b2cbd41d29535c982ad693d6c1b676b60a79'::text) AND (status = 'completed'::text) AND (currency = 'KES'::text))
+                    Rows Removed by Filter: 333300
+                    Buffers: shared hit=6564 read=13891 written=67
+Planning:
+  Buffers: shared hit=6
+Planning Time: 0.046 ms
+Execution Time: 33.661 ms

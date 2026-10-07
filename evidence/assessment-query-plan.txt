@@ -1,0 +1,10 @@
+Aggregate  (cost=10.35..10.36 rows=1 width=32) (actual time=0.039..0.040 rows=1 loops=1)
+  Buffers: shared hit=6
+  ->  Index Only Scan using ledger_completed_customer_cover on ledger_entries  (cost=0.55..10.13 rows=90 width=8) (actual time=0.025..0.032 rows=100 loops=1)
+        Index Cond: (customer_id = '23f29821ec8e78654a3d8388b063b2cbd41d29535c982ad693d6c1b676b60a79'::text)
+        Heap Fetches: 0
+        Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=170 read=1
+Planning Time: 0.362 ms
+Execution Time: 0.072 ms
